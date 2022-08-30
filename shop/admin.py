@@ -23,7 +23,7 @@ class BrandAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'brand', 'description', 'category', 'image_preview')
+    list_display = ('id', 'name', 'brand', 'price', 'description', 'category', 'image_preview')
     list_display_links = ('id', 'name')
     search_fields = ('name__iregex',)
 

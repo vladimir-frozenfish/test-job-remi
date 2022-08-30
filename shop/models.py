@@ -51,6 +51,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', verbose_name='Бренд товара')
     description = models.TextField(verbose_name='Описание товара')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name='Категория товара')
+    price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Стоимость товара')
     image_preview = models.ImageField(
         upload_to='product/',
         validators=[validate_product_image_size, ],
