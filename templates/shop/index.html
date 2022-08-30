@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %} Интернет магазин. Главная страница {% endblock %}
+
+{% block content %}
+
+<div class="caption">Каталог товаров</div>
+
+<div class="shop_main">
+
+    <aside>
+        <div>
+            <a href="{% url 'shop:index' %}"><div class="category_caption">Категории</div></a>
+
+            {% for category in categorys %}
+                <div><a href="{% url 'shop:category' category.slug %}"> {{ category.name }} </a></div>
+            {% endfor %}
+
+        </div>
+
+        <div class="dividing_vertical_line"></div>
+    </aside>
+
+    <div class="product_category">
+
+        <a href="{% url 'shop:index' %}"><div class="category_caption">Главная</div></a>
+
+        <div class="grid_category">
+        {% for category in categorys %}
+            <div>
+                <a href="{% url 'shop:category' category.slug %}">
+                    <div><img src="{{ category.image.url }}" class="img_category"></div>
+                    <div>{{ category.name }}</div>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+
+
+        <div class="product_caption">Горячая 10-ка товаров</div>
+
+        <div class="grid_category">
+            <div>
+                <a href="">
+                <div><img src="img/product_250x250.png" class="img_category"></div>
+                <div>Компьютер</div>
+                </a>
+            </div>
+
+            <div>
+                <a href="">
+                <div><img src="img/product_250x250.png" class="img_category"></div>
+                <div>Компьютер</div>
+                </a>
+            </div>
+
+            <div>
+                <a href="">
+                <div><img src="img/product_250x250.png" class="img_category"></div>
+                <div>Компьютер</div>
+                </a>
+            </div>
+
+            <div>
+                <a href="">
+                <div><img src="img/product_250x250.png" class="img_category"></div>
+                <div>Компьютер</div>
+                </a>
+            </div>
+
+            <div>
+                <a href="">
+                <div><img src="img/product_250x250.png" class="img_category"></div>
+                <div>Компьютер</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

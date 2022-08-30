@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %} заголовка нет... {% endblock %}</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!--	<link rel="icon" href="{% static 'img/logo.png' %}" type="image">-->
+</head>
+
+<body>
+    <header>
+      {% include "includes/header.html" %}
+    </header>
+
+    <main>
+      {% block content %}
+        контента нет...
+      {% endblock %}
+    </main>
+
+    <footer>
+      {% include "includes/footer.html" %}
+    </footer>
+</body>
+</html>
