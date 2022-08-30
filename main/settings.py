@@ -94,3 +94,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 """Константы"""
 CATEGORY_IMAGE_RESOLUTION = (250, 150)
+PRODUCT_IMAGE_RESOLUTION = (250, 250)

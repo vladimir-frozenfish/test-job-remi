@@ -114,7 +114,7 @@ footer {
 
 .shop_main {
   height: 80%;
-  margin: 20px 4%;
+  margin: 0px 4%;
   display: grid;
   grid-template-columns: 180px 1fr;
 }
