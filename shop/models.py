@@ -8,6 +8,18 @@ from .validators import validate_category_image_size, validate_product_image_siz
 
 class User(AbstractUser):
     email = models.EmailField(max_length=254, unique=True)
+    favorite_product = models.ManyToManyField(
+        'Product',
+        through='FavoriteProduct',
+        related_name='favorite_product'
+    )
+
+    def get_favorite_product(self):
+        return ', '.join(
+            self.favorite_product.all().values_list('name', flat=True)
+        )
+
+    get_favorite_product.short_description = 'Избранные товары'
 
     class Meta:
         verbose_name_plural = "Пользователи"
@@ -82,5 +94,26 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.category} {self.name}'
+
+
+class FavoriteProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorite')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Избранные товары'
+        verbose_name = 'Избранный товар'
+        ordering = ['user']
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'product'],
+                name='unique_user_favorite_product'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} {self.product}'
+
 
 

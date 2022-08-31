@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Brand, Category, Product, User
+from .models import Brand, Category, FavoriteProduct, Product, User
 
 
 class CustomUserModel(UserAdmin):
@@ -10,7 +10,8 @@ class CustomUserModel(UserAdmin):
         'username',
         'email',
         'first_name',
-        'last_name'
+        'last_name',
+        'get_favorite_product',
     )
     search_fields = ('username', 'email')
     list_display_links = ('id', 'username', 'email')
@@ -41,9 +42,17 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name__iregex',)
 
 
+class FavoriteProductAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product')
+    list_filter = ('user',)
+
+
 admin.site.register(User, CustomUserModel)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(FavoriteProduct, FavoriteProductAdmin)
+
+
 
 
