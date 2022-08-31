@@ -61,3 +61,14 @@ def get_category_tree(category_queue, nested=0):
                     category_tree.append(CFT(child_category, nested + 1, ''))
     return category_tree
 
+
+def get_all_child_categories(child_categories):
+    """функция возвращает все дочерние категории до конца категорий
+    от текущей категории"""
+    all_child_categories = list(child_categories)
+
+    for current_category in all_child_categories:
+        all_child_categories.extend(list(current_category.child_category.all()))
+
+    return all_child_categories
+

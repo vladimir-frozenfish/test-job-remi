@@ -68,6 +68,6 @@ class Product(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return f'{self.category} {self.name}'
 
 

@@ -144,3 +144,4 @@ dmypy.json
 
 .mypy_cache
 /db.sqlite3
+/temp.py
