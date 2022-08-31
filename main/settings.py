@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
+    'core.apps.CoreConfig',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
@@ -83,6 +85,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL = 'shop.User'
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_dev')]
@@ -91,6 +95,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+"""редиректы аутентификации"""
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'shop:index'
+LOGOUT_REDIRECT_URL = 'shop:index'
+
+"""настройка отправки почты"""
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 """Константы"""
 CATEGORY_IMAGE_RESOLUTION = (250, 150)

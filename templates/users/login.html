@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load form_filters %}
+
+{% block title %}Войти{% endblock %}
+
+{% block content %}
+
+<div class="login">
+    <div class="login_block">
+
+        <div class="login_title">Вход</div>
+
+        {% if user.is_authenticated %}
+            <span class="red_text warning_text">
+                Вы уже вошли на сайт под именем - {{ user.username }}. Выйдете, если необходимо
+                авторизоваться под другим именем.
+            </span>
+
+        {% else %}
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="red_text">{{ error|escape }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                    <div class="red_text">{{ error|escape }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'users:login' %}" class="login_form">
+                {% csrf_token %}
+                <div>
+                    {{ form.username.errors }}
+                    <label for="{{ form.username.id_for_label }}">
+                        {{ form.username.label }}: <span class="red_text">*</span>
+                    </label>
+                    <div>{{ form.username|addclass:'add_task' }}</div>
+                </div>
+                <div>
+                    {{ form.password.errors }}
+                    <label for="{{ form.password.id_for_label }}">
+                        {{ form.password.label }}: <span class="red_text">*</span>
+                    </label>
+                    <div>{{ form.password|addclass:'add_task' }}</div>
+                </div>
+
+                <div class="login_buttons">
+                    <input type="submit" value="Войти" class="login_button_signin">
+                    <a href="{% url 'users:password_reset_form' %}"><div class="login_button_forgotpassword">Забыли пароль</div></a>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

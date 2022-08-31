@@ -5,12 +5,22 @@
         <a href="{% url 'shop:index' %}"><div class="header_logo">
             <div>Sho<span class="red_text">p</span></div>
         </div></a>
-        <div class="button_header">
-            <div>Регистрация</div>
-        </div>
-        <div class="button_header">
-            <div>Вход</div>
-        </div>
+
+        {% if user.is_authenticated %}
+            <div class="button_header">
+                <div>Кабинет</div>
+            </div>
+            <a href="{% url 'users:logout' %}"><div class="button_header">
+                <div>Выход</div>
+            </div></a>
+        {% else %}
+            <a href="{% url 'users:signup' %}"><div class="button_header">
+                <div>Регистрация</div>
+            </div></a>
+            <a href="{% url 'users:login' %}"><div class="button_header">
+                <div>Вход</div>
+            </div></a>
+        {% endif %}
     </div>
 
 

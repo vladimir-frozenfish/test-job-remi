@@ -1,8 +1,21 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.utils.safestring import mark_safe
 
 from .validators import validate_category_image_size, validate_product_image_size
+
+
+class User(AbstractUser):
+    email = models.EmailField(max_length=254, unique=True)
+
+    class Meta:
+        verbose_name_plural = "Пользователи"
+        verbose_name = "Пользователь"
+        ordering = ["id"]
+
+    def __str__(self):
+        return self.username
 
 
 class Category(models.Model):

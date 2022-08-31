@@ -1,6 +1,19 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import Brand, Category, Product
+from .models import Brand, Category, Product, User
+
+
+class CustomUserModel(UserAdmin):
+    list_display = (
+        'id',
+        'username',
+        'email',
+        'first_name',
+        'last_name'
+    )
+    search_fields = ('username', 'email')
+    list_display_links = ('id', 'username', 'email')
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -28,6 +41,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name__iregex',)
 
 
+admin.site.register(User, CustomUserModel)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Product, ProductAdmin)
