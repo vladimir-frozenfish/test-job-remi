@@ -133,14 +133,14 @@ aside {
 
 .category_caption {
   font-size: 20px;
-  margin: 10px 0;  
+  margin: 10px 0;
 }
 
 .product_caption {
   font-size: 20px;
   text-align: center;
   font-weight: bold;
-  margin: 10px 0;  
+  margin: 10px 0;
 }
 
 .grid_category {
@@ -336,4 +336,31 @@ aside {
   width: 298px;
   height: 18px;
   border: 2px solid rgb(0, 0, 0);
+}
+
+.cabinet_caption {
+  text-align: center;
+  font-size: 25px;
+  margin: 1px 0;
+}
+
+.cabinet_data_grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  font-size: 18pt;
+  grid-column-gap: 10px;
+}
+
+.cabinet_data_self {
+  display: grid;
+  align-items: center;
+  background-color: #ebebeb;
+  margin: 0px 0px;
+  padding-left: 15px;
+  height: 46px;
+}
+
+/* пустой блок */
+.empty {
+  height: 20px;
 }

@@ -57,17 +57,7 @@
         </div>
         <div class="dividing_line_filter"></div>
 
-        <div class="grid_category">
-            {% for product in products %}
-            <div>
-                <a href="">
-                <div><img src="{{ product.image_preview.url }}" class="img_category"></div>
-                <div>{{ product.brand.name }} {{ product.name }}</div>
-                <div>{{ product.price }} ₽</div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+        {% include "includes/product_list.html" %}
     </div>
 </div>
 

@@ -8,12 +8,14 @@ from django.contrib.auth.views import (LoginView,
                                        PasswordResetCompleteView)
 from django.urls import path
 
-from .views import SignUp
+from .views import cabinet, favorite_product, SignUp
 
 app_name = 'users'
 
 
 urlpatterns = [
+    path('cabinet/', cabinet, name='cabinet'),
+    path('cabinet/favorite_product', favorite_product, name='favorite_product'),
     path('signup/', SignUp.as_view(), name='signup'),
     path('logout/',
          LogoutView.as_view(),

@@ -1,0 +1,27 @@
+{% extends "base_cabinet.html" %}
+
+{% load form_filters %}
+
+{% block title %} Личный кабинет {% endblock %}
+
+{% block cabinet_data %}
+      <div class="cabinet_caption">Личные данные:</div>
+      <div class="cabinet_data_grid">
+        <div class="cabinet_data_self">Username:</div>
+        <div class="cabinet_data_self">{{ user.username }}</div>
+      </div>
+      <div class="cabinet_data_grid">
+        <div class="cabinet_data_self">email:</div>
+        <div class="cabinet_data_self">{{ user.email }}</div>
+      </div>
+      <div class="cabinet_data_grid">
+        <div class="cabinet_data_self">Имя:</div>
+        <div class="cabinet_data_self">{{ user.first_name }}</div>
+      </div>
+      <div class="cabinet_data_grid">
+        <div class="cabinet_data_self">Фамилия:</div>
+        <div class="cabinet_data_self">{{ user.last_name }}</div>
+      </div>
+
+      <div class="empty"></div>
+{% endblock %}

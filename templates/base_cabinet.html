@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="caption">Личный кабинет - {{ user.username }}</div>
+
+<div class="shop_main">
+
+    <aside>
+        {% include "includes/aside_cabinet.html" %}
+        <div class="dividing_vertical_line"></div>
+    </aside>
+
+    <div class="product_category">
+        {% block cabinet_data %}
+            контента нет...
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}

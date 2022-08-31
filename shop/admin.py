@@ -37,9 +37,14 @@ class BrandAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'brand', 'price', 'description', 'category', 'image_preview')
+    list_display = ('id', 'name', 'brand', 'price', 'description', 'category', 'image_preview', 'count_favorite')
     list_display_links = ('id', 'name')
     search_fields = ('name__iregex',)
+
+    def count_favorite(self, obj):
+        return FavoriteProduct.objects.filter(product=obj).count()
+
+    count_favorite.short_description = 'Количество добавлений в избранное'
 
 
 class FavoriteProductAdmin(admin.ModelAdmin):

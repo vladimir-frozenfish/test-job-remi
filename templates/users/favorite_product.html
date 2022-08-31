@@ -1,0 +1,11 @@
+{% extends "base_cabinet.html" %}
+
+{% load form_filters %}
+
+{% block title %} Личный кабинет - избранные товары{% endblock %}
+
+{% block cabinet_data %}
+      <div class="cabinet_caption">Избранные товары:</div>
+
+      {% include "includes/product_list.html" %}
+{% endblock %}

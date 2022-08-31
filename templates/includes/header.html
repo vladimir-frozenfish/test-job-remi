@@ -7,9 +7,9 @@
         </div></a>
 
         {% if user.is_authenticated %}
-            <div class="button_header">
+            <a href="{% url 'users:cabinet' %}"><div class="button_header">
                 <div>Кабинет</div>
-            </div>
+            </div></a>
             <a href="{% url 'users:logout' %}"><div class="button_header">
                 <div>Выход</div>
             </div></a>
