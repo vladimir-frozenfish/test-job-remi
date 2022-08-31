@@ -13,6 +13,6 @@ def validate_category_image_size(image):
 
 def validate_product_image_size(image):
     img = Image.open(image)
-    if img.width != settings.PRODUCT_IMAGE_RESOLUTION[0] or img.height != settings.PRODUCT_IMAGE_RESOLUTION[1]:
+    if img.width != settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0] or img.height != settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]:
         raise ValidationError(f'Разрешение изображения не соответствует требуемым: '
-                              f'{settings.PRODUCT_IMAGE_RESOLUTION[0]}x{settings.PRODUCT_IMAGE_RESOLUTION[1]}')
+                              f'{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0]}x{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]}')

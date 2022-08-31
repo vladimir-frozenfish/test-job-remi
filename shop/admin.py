@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.safestring import mark_safe
 
-from .models import Brand, Category, FavoriteProduct, Product, User
+from .models import (Brand, Category,
+                     ImageProduct, FavoriteProduct,
+                     Product, User)
 
 
 class CustomUserModel(UserAdmin):
@@ -18,10 +21,16 @@ class CustomUserModel(UserAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug', 'parent_category', 'child_category', 'image')
+    list_display = ('id', 'name', 'slug', 'parent_category', 'child_category', 'image', 'get_image')
+    readonly_fields = ('get_image',)
     list_display_links = ('id', 'name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name__iregex',)
+
+    def get_image(self, obj):
+        return mark_safe(f'<img src={obj.image.url} width="100" height="60">')
+
+    get_image.short_description = 'Изображение категории'
 
     def child_category(self, obj):
         return ', '.join(obj.child_category.all().values_list('name', flat=True))
@@ -37,9 +46,19 @@ class BrandAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'brand', 'price', 'description', 'category', 'image_preview', 'count_favorite')
+    list_display = ('id', 'name', 'brand',
+                    'price', 'description',
+                    'category', 'count_favorite',
+                    'image_preview', 'get_image_preview')
+    readonly_fields = ('get_image_preview',)
     list_display_links = ('id', 'name')
     search_fields = ('name__iregex',)
+    list_filter = ('brand', 'category')
+
+    def get_image_preview(self, obj):
+        return mark_safe(f'<img src={obj.image_preview.url} width="100" height="100">')
+
+    get_image_preview.short_description = 'Изображение предпросмотр товара'
 
     def count_favorite(self, obj):
         return FavoriteProduct.objects.filter(product=obj).count()
@@ -52,11 +71,20 @@ class FavoriteProductAdmin(admin.ModelAdmin):
     list_filter = ('user',)
 
 
+class ImageProductAdmin(admin.ModelAdmin):
+    list_display = ('title', 'product', 'image')
+    list_filter = ('product',)
+
+
 admin.site.register(User, CustomUserModel)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(FavoriteProduct, FavoriteProductAdmin)
+admin.site.register(ImageProduct, ImageProductAdmin)
+
+admin.site.site_title = 'Администрирование Интернет-магазина'
+admin.site.site_header = 'Администрирование Интернет-магазина'
 
 
 

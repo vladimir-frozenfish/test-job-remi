@@ -3,16 +3,17 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.utils.safestring import mark_safe
 
-from .validators import validate_category_image_size, validate_product_image_size
+from PIL import Image
+
+from .validators import (validate_category_image_size,
+                         validate_product_image_size)
 
 
 class User(AbstractUser):
     email = models.EmailField(max_length=254, unique=True)
-    favorite_product = models.ManyToManyField(
-        'Product',
-        through='FavoriteProduct',
-        related_name='favorite_product'
-    )
+    favorite_product = models.ManyToManyField('Product',
+                                              through='FavoriteProduct',
+                                              related_name='favorite_product')
 
     def get_favorite_product(self):
         return ', '.join(
@@ -73,17 +74,25 @@ class Brand(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование товара')
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products', verbose_name='Бренд товара')
+    brand = models.ForeignKey(Brand,
+                              on_delete=models.CASCADE,
+                              related_name='products',
+                              verbose_name='Бренд товара')
     description = models.TextField(verbose_name='Описание товара')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', verbose_name='Категория товара')
-    price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Стоимость товара')
+    category = models.ForeignKey(Category,
+                                 on_delete=models.CASCADE,
+                                 related_name='products',
+                                 verbose_name='Категория товара')
+    price = models.DecimalField(max_digits=12,
+                                decimal_places=2,
+                                verbose_name='Стоимость товара')
     image_preview = models.ImageField(
         upload_to='product/',
         validators=[validate_product_image_size, ],
         verbose_name='Изображение предпросмотр товара',
         help_text=mark_safe(f'<span style="color:red; font-size:14px;">'
                             f'Разрешение изображения должно быть: '
-                            f'{settings.PRODUCT_IMAGE_RESOLUTION[0]}*{settings.PRODUCT_IMAGE_RESOLUTION[1]}'
+                            f'{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0]}*{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]}'
                             f'</span>')
     )
 
@@ -97,7 +106,9 @@ class Product(models.Model):
 
 
 class FavoriteProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorite')
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,
+                                related_name='favorite')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -114,6 +125,41 @@ class FavoriteProduct(models.Model):
 
     def __str__(self):
         return f'{self.user} {self.product}'
+
+
+class ImageProduct(models.Model):
+    title = models.CharField(max_length=100, verbose_name='Заголовок изображения')
+    image = models.ImageField(
+        upload_to='product/',
+        verbose_name='Изображение товара',
+        help_text=mark_safe(f'<span style="color:red; font-size:14px;">'
+                            f'Если разрешение изображения слишком большое, оно будет уменьшено до '
+                            f'{settings.PRODUCT_IMAGE_RESOLUTION[0]} пикселей по большей стороне'
+                            f'</span>')
+    )
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,
+                                related_name='images',
+                                verbose_name='Изображение товара')
+
+    def save(self, *args, **kwargs):
+        """изменение размера изображения при сохранении записи"""
+        super().save(*args, **kwargs)
+        img = Image.open(self.image.path)
+
+        if img.width > settings.PRODUCT_IMAGE_RESOLUTION[0] or img.height > settings.PRODUCT_IMAGE_RESOLUTION[1]:
+            img.thumbnail(settings.PRODUCT_IMAGE_RESOLUTION)
+            img.save(self.image.path)
+
+    class Meta:
+        verbose_name_plural = 'Изображения товаров'
+        verbose_name = 'Изображение товаров'
+        ordering = ['product']
+
+    def __str__(self):
+        return self.title
+
+
 
 
 
