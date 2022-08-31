@@ -8,11 +8,18 @@ from .utils import get_all_child_categories, get_category_queue, get_category_tr
 
 def index(request):
     """главная страница интернет-магазина"""
+
+    """получение начальных категорий, тех у которых нет 
+    родительских категорий"""
     categorys_main = Category.objects.filter(parent_category__isnull=True)
+
+    """получение всех продуктов"""
+    products = Product.objects.all()
 
     template = 'shop/index.html'
 
-    context = {'categorys': categorys_main}
+    context = {'categorys': categorys_main,
+               'products': products}
 
     return render(request, template, context)
 
