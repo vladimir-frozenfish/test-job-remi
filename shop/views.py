@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import Category, ImageProduct, FavoriteProduct, Product
+from .forms import OrderingForm
 from .utils import get_all_child_categories, get_category_queue, get_category_tree
 
 
@@ -42,6 +43,14 @@ def category(request, slug):
         текущей категории"""
         products = category.products.all()
 
+    """сортировка товаров"""
+    current_order = 'name'
+    form_ordering = OrderingForm(request.GET)
+    if form_ordering.is_valid():
+        if form_ordering.cleaned_data.get('order'):
+            current_order = form_ordering.cleaned_data.get('order')
+            products = products.order_by(current_order)
+
     template = 'shop/category.html'
 
     """получение списка категорий для отображения
@@ -57,7 +66,9 @@ def category(request, slug):
         'products': products,
         'child_categorys': child_categorys,
         'category_queue': category_queue,
-        'category_tree': category_tree
+        'category_tree': category_tree,
+        'form_ordering': form_ordering,
+        'current_order': current_order
     }
 
     return render(request, template, context)

@@ -3,7 +3,7 @@
     <!-- блок отображения дерева каталога -->
     {% for category in category_tree %}
         <div style="padding:0px {% widthratio category.nested 1 15 %}px;" class="{{ category.is_active }}">
-            <a href="{% url 'shop:category' category.object.slug %}">{{ category.object.name }}</a>
+            <a href="{% url 'shop:category' category.object.slug %}?order={{ current_order }}">{{ category.object.name }}</a>
         </div>
     {% endfor %}
 </div>

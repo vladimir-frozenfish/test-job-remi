@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load form_filters %}
+
 {% block title %} Интернет магазин. {{ category.name }} {% endblock %}
 
 {% block content %}
@@ -19,7 +21,7 @@
         <div class="category_caption">
             <a href="{% url 'shop:index' %}">Главная</a>
             {% for category in category_queue %}
-                -> <a href="{% url 'shop:category' category.slug %}"> {{ category.name }} </a>
+                -> <a href="{% url 'shop:category' category.slug %}?order={{ current_order }}"> {{ category.name }}</a>
             {% endfor %}
         </div>
 
@@ -28,7 +30,7 @@
         <div class="grid_category">
             {% for category in child_categorys %}
             <div>
-                <a href="{% url 'shop:category' category.slug %}">
+                <a href="{% url 'shop:category' category.slug %}?order={{ current_order }}">
                     <div><img src="{{ category.image.url }}" class="img_category"></div>
                     <div>{{ category.name }}</div>
                 </a>
@@ -37,14 +39,12 @@
         </div>
         {% endif %}
 
+        <!-- блок отображения сортировки -->
         <div class="dividing_line_filter"></div>
         <div class="flex_horizontal">
-            <form>
-                <select class="sort_select">
-                    <option>По алфавиту</option>
-                    <option>По имени</option>
-                </select>
-                <input type="submit" value="Сортировать" class="button_sort">
+            <form method="get">
+                {{ form_ordering.order|addclass:'sort_select' }}
+                <input type="submit" name="ordering" value="Сортировать" class="button_sort">
             </form>
         </div>
         <div class="dividing_line_filter"></div>
