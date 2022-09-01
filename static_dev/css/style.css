@@ -347,7 +347,7 @@ aside {
 .cabinet_data_grid {
   display: grid;
   grid-template-columns: 160px 1fr;
-  font-size: 18pt;
+  font-size: 24px;
   grid-column-gap: 10px;
 }
 
@@ -363,4 +363,30 @@ aside {
 /* пустой блок */
 .empty {
   height: 20px;
+}
+
+.photo_product {
+  max-width: 100px;
+}
+
+.product_data_grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  font-size: 18px;
+  grid-column-gap: 10px;
+}
+
+.product_data_self {
+  display: grid;
+  align-items: center;
+  background-color: #ebebeb;
+  margin: 0px 0px;
+  padding-left: 15px;
+  min-height: 35px;
+}
+
+.buttons_product {
+  display: grid;
+  row-gap: 10px;
+  justify-content: end;
 }

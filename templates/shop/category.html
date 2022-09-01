@@ -9,15 +9,7 @@
 <div class="shop_main">
 
     <aside>
-        <div>
-            <a href="{% url 'shop:index' %}"><div class="category_caption">Категории</div></a>
-            <!-- блок отображения дерева каталога -->
-            {% for category in category_tree %}
-                <div style="padding:0px {% widthratio category.nested 1 15 %}px;" class="{{ category.is_active }}">
-					<a href="{% url 'shop:category' category.object.slug %}">{{ category.object.name }}</a>
-				</div>
-            {% endfor %}
-        </div>
+        {% include "includes/aside_categories.html" %}
         <div class="dividing_vertical_line"></div>
     </aside>
 

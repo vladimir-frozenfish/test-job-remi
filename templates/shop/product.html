@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %} {{ product.name }} {% endblock %}
+
+{% block content %}
+
+<div class="caption">{{ product.name }}</div>
+
+<div class="shop_main">
+    <aside>
+        {% include "includes/aside_categories.html" %}
+        <div class="dividing_vertical_line"></div>
+    </aside>
+
+    <div class="product_category">
+
+        <!-- блок отображения очереди каталога -->
+        <div class="category_caption">
+            <a href="{% url 'shop:index' %}">Главная</a>
+            {% for category in category_queue %}
+                -> <a href="{% url 'shop:category' category.slug %}"> {{ category.name }} </a>
+            {% endfor %}
+        </div>
+
+        <div class="grid_category">
+            {% for image in images %}
+                <div>
+                    <a href="{{ image.image.url }}" target="_blank">
+                    <div><img src="{{ image.image.url }}" width="100%"></div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+          <div class="product_data_grid">
+            <div class="product_data_self">Бренд:</div>
+            <div class="product_data_self">{{ product.brand }}</div>
+          </div>
+          <div class="product_data_grid">
+            <div class="product_data_self">Имя:</div>
+            <div class="product_data_self">{{ product.name }}</div>
+          </div>
+          <div class="product_data_grid">
+            <div class="product_data_self">Описание:</div>
+            <div class="product_data_self">{{ product.description }}</div>
+          </div>
+          <div class="product_data_grid">
+            <div class="product_data_self">Цена:</div>
+            <div class="product_data_self">{{ product.price }} ₽</div>
+          </div>
+
+          <div class="buttons_product">
+            <div class="button_header">
+              <div>В корзину</div>
+          </div>
+
+
+        <div class="button_header">
+          <div>В избранное</div>
+        </div>
+
+          <div class="empty"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

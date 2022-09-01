@@ -1,7 +1,7 @@
 <div class="grid_category">
     {% for product in products %}
     <div>
-        <a href="">
+        <a href="{% url 'shop:product' product.id %}">
         <div><img src="{{ product.image_preview.url }}" class="img_category"></div>
         <div>{{ product.brand.name }} {{ product.name }}</div>
         <div>{{ product.price }} ₽</div>

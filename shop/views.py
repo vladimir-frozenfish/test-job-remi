@@ -2,7 +2,7 @@ from collections import deque
 
 from django.shortcuts import get_object_or_404, render
 
-from .models import Category, Product
+from .models import Category, ImageProduct, Product
 from .utils import get_all_child_categories, get_category_queue, get_category_tree
 
 
@@ -57,6 +57,30 @@ def category(request, slug):
         'child_categorys': child_categorys,
         'category_queue': category_queue,
         'category_tree': category_tree
+    }
+
+    return render(request, template, context)
+
+
+def product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    images = ImageProduct.objects.filter(product=product)
+
+    """получение списка категорий для отображения
+        на HTML очереди категорий"""
+    category_queue = get_category_queue(product.category)
+
+    """получение дерева категорий"""
+    category_queue_for_tree = deque(category_queue)
+    category_tree = get_category_tree(category_queue_for_tree)
+
+    template = 'shop/product.html'
+
+    context = {
+        'product': product,
+        'category_queue': category_queue,
+        'category_tree': category_tree,
+        'images': images
     }
 
     return render(request, template, context)
