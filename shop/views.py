@@ -1,6 +1,7 @@
 from collections import deque
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import Category, ImageProduct, FavoriteProduct, Product
@@ -15,8 +16,10 @@ def index(request):
     родительских категорий"""
     categorys_main = Category.objects.filter(parent_category__isnull=True)
 
-    """получение всех продуктов"""
-    products = Product.objects.all()
+    """получение продуктов отсортированных 
+    по количеству добавлений в избранное - 
+    получаем 3 таких продукта"""
+    products = Product.objects.all().annotate(favorite_count=Count('favorite')).order_by('-favorite_count')[:3]
 
     template = 'shop/index.html'
 
