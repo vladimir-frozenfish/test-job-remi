@@ -54,10 +54,15 @@
               <div>В корзину</div>
           </div>
 
-
-        <div class="button_header">
-          <div>В избранное</div>
-        </div>
+            {% if is_favorite_product %}
+                <a href="{% url 'shop:add_del_favorite' product.id %}"><div class="button_header small_text">
+                  <div>Из избранного</div>
+                </div></a>
+            {% else %}
+                <a href="{% url 'shop:add_del_favorite' product.id %}"><div class="button_header">
+                  <div>В избранное</div>
+                </div></a>
+            {% endif %}
 
           <div class="empty"></div>
         </div>

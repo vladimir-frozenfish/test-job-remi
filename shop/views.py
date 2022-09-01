@@ -1,8 +1,9 @@
 from collections import deque
 
-from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Category, ImageProduct, Product
+from .models import Category, ImageProduct, FavoriteProduct, Product
 from .utils import get_all_child_categories, get_category_queue, get_category_tree
 
 
@@ -74,16 +75,39 @@ def product(request, product_id):
     category_queue_for_tree = deque(category_queue)
     category_tree = get_category_tree(category_queue_for_tree)
 
+    """проверка является ли текущий товар в избранном
+    у аутентифицированного пользователя"""
+    is_favorite_product = (
+            request.user.is_authenticated
+            and FavoriteProduct.objects.filter(user=request.user, product=product).exists()
+    )
+
     template = 'shop/product.html'
 
     context = {
         'product': product,
         'category_queue': category_queue,
         'category_tree': category_tree,
-        'images': images
+        'images': images,
+        'is_favorite_product': is_favorite_product
     }
 
     return render(request, template, context)
+
+
+@login_required
+def add_del_favorite(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    favorite_product, created = FavoriteProduct.objects.get_or_create(
+        product=product, user=request.user
+    )
+
+    if not created:
+        favorite_product.delete()
+
+    return redirect('shop:product', product_id)
+
 
 
 

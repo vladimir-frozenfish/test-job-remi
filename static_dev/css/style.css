@@ -70,6 +70,10 @@ header {
   border-radius: 4px;
 }
 
+.small_text {
+  font-size: 16px;
+}
+
 .button_header:hover {
   background-color: #e4e4e4;
   border: 1px solid rgb(0, 0, 0);
