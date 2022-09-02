@@ -145,3 +145,6 @@ dmypy.json
 .mypy_cache
 /db.sqlite3
 /temp.py
+/dump_before_order.json
+/dump.json
+/dump1.json

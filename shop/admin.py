@@ -2,9 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
 
-from .models import (Brand, Category,
-                     ImageProduct, FavoriteProduct,
-                     Product, User,
+from .models import (Brand,
+                     Category,
+                     ImageProduct,
+                     FavoriteProduct,
+                     Order,
+                     OrderProduct,
+                     Product,
+                     User,
                      ShoppingCartProduct)
 
 
@@ -79,8 +84,19 @@ class ImageProductAdmin(admin.ModelAdmin):
 
 
 class ShoppingCartProductAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product')
+    list_display = ('user', 'product', 'amount')
     list_filter = ('user',)
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'get_order_products', 'status', 'date_ordered', 'date_sent', 'date_completed', 'shipping_method', 'city', 'address', 'comment')
+    list_filter = ('user',)
+    list_display_links = ('id', 'user')
+
+
+class OrderProductAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'amount')
+    list_filter = ('order',)
 
 
 admin.site.register(User, CustomUserModel)
@@ -90,6 +106,8 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(FavoriteProduct, FavoriteProductAdmin)
 admin.site.register(ImageProduct, ImageProductAdmin)
 admin.site.register(ShoppingCartProduct, ShoppingCartProductAdmin)
+admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderProduct, OrderProductAdmin)
 
 admin.site.site_title = 'Администрирование Интернет-магазина'
 admin.site.site_header = 'Администрирование Интернет-магазина'

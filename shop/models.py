@@ -232,7 +232,7 @@ class Order(models.Model):
     date_completed = models.DateTimeField(blank=True, verbose_name='Дата завершения заказа')
     city = models.CharField(max_length=50, default='Город доставки заказа')
     address = models.CharField(max_length=150, default='Адрес доставки заказа')
-    shipping_method = models.CharField(max_length=30, choices=status_order, default=ShippingMethod.MAIL, verbose_name='Способ доставки заказа')
+    shipping_method = models.CharField(max_length=30, choices=method_shipment, default=ShippingMethod.MAIL, verbose_name='Способ доставки заказа')
     comment = models.CharField(max_length=250, blank=True, verbose_name='Комментарии к заказу')
 
     def get_order_products(self):
@@ -271,6 +271,3 @@ class OrderProduct(models.Model):
     def __str__(self):
         return (f'{self.product} - '
                 f'{self.amount} шт.')
-
-
-
