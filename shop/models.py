@@ -6,7 +6,8 @@ from django.utils.safestring import mark_safe
 from PIL import Image
 
 from .validators import (validate_category_image_size,
-                         validate_product_image_size)
+                         validate_product_image_size,
+                         validate_above_zero)
 
 
 class User(AbstractUser):
@@ -14,6 +15,11 @@ class User(AbstractUser):
     favorite_product = models.ManyToManyField('Product',
                                               through='FavoriteProduct',
                                               related_name='favorite_product')
+    shopping_cart = models.ManyToManyField(
+        'Product',
+        through='ShoppingCartProduct',
+        related_name='shopping_cart'
+    )
 
     def get_favorite_product(self):
         return ', '.join(
@@ -21,6 +27,12 @@ class User(AbstractUser):
         )
 
     get_favorite_product.short_description = 'Избранные товары'
+
+    def get_shopping_cart(self):
+        products = ShoppingCartProduct.objects.filter(user=self.id)
+        return ", ".join((map(str, products)))
+
+    get_shopping_cart.short_description = 'Товары в корзине'
 
     class Meta:
         verbose_name_plural = "Пользователи"
@@ -160,6 +172,26 @@ class ImageProduct(models.Model):
         return self.title
 
 
+class ShoppingCartProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    amount = models.PositiveSmallIntegerField(
+        validators=[validate_above_zero],
+        verbose_name='Количество товаров'
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = 'Товары в корзине'
+        verbose_name = 'Товар в корзине'
+        ordering = ['user']
 
+        constraints = [
+            models.UniqueConstraint(
+                fields=['product', 'user'],
+                name='unique_product_user'
+            )
+        ]
 
+    def __str__(self):
+        return (f'{self.product} - '
+                f'{self.amount} шт.')

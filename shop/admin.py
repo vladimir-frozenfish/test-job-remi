@@ -4,7 +4,8 @@ from django.utils.safestring import mark_safe
 
 from .models import (Brand, Category,
                      ImageProduct, FavoriteProduct,
-                     Product, User)
+                     Product, User,
+                     ShoppingCartProduct)
 
 
 class CustomUserModel(UserAdmin):
@@ -14,6 +15,7 @@ class CustomUserModel(UserAdmin):
         'email',
         'first_name',
         'last_name',
+        'get_shopping_cart',
         'get_favorite_product',
     )
     search_fields = ('username', 'email')
@@ -76,12 +78,18 @@ class ImageProductAdmin(admin.ModelAdmin):
     list_filter = ('product',)
 
 
+class ShoppingCartProductAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product')
+    list_filter = ('user',)
+
+
 admin.site.register(User, CustomUserModel)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(FavoriteProduct, FavoriteProductAdmin)
 admin.site.register(ImageProduct, ImageProductAdmin)
+admin.site.register(ShoppingCartProduct, ShoppingCartProductAdmin)
 
 admin.site.site_title = 'Администрирование Интернет-магазина'
 admin.site.site_header = 'Администрирование Интернет-магазина'

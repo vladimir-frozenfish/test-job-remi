@@ -16,3 +16,8 @@ def validate_product_image_size(image):
     if img.width != settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0] or img.height != settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]:
         raise ValidationError(f'Разрешение изображения не соответствует требуемым: '
                               f'{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0]}x{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]}')
+
+
+def validate_above_zero(value):
+    if value < 1:
+        raise ValidationError("Количество не может быть меньше единицы")
