@@ -228,12 +228,14 @@ class Order(models.Model):
     )
     status = models.CharField(max_length=20, choices=status_order, default=OrderStatus.ORDERED, verbose_name='Статус заказа')
     date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Дата оформления заказа')
-    date_sent = models.DateTimeField(blank=True, verbose_name='Дата отправки заказа')
-    date_completed = models.DateTimeField(blank=True, verbose_name='Дата завершения заказа')
+    date_sent = models.DateTimeField(blank=True, null=True, verbose_name='Дата отправки заказа')
+    date_completed = models.DateTimeField(blank=True, null=True, verbose_name='Дата завершения заказа')
     city = models.CharField(max_length=50, default='Город доставки заказа')
     address = models.CharField(max_length=150, default='Адрес доставки заказа')
     shipping_method = models.CharField(max_length=30, choices=method_shipment, default=ShippingMethod.MAIL, verbose_name='Способ доставки заказа')
     comment = models.CharField(max_length=250, blank=True, verbose_name='Комментарии к заказу')
+    is_paid = models.BooleanField(default=False, verbose_name='Статус оплаты')
+    total_cost = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Общая стоимость заказа')
 
     def get_order_products(self):
         products = OrderProduct.objects.filter(order=self.id)
@@ -245,6 +247,10 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
         verbose_name = 'Заказ'
         ordering = ['id']
+
+    def __str__(self):
+        return (f'{self.user} - '
+                f'{self.date_ordered}')
 
 
 class OrderProduct(models.Model):

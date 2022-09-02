@@ -11,6 +11,7 @@ from django.urls import path
 from .views import (cabinet,
                     clean_shopping_cart,
                     favorite_product,
+                    ordering,
                     shopping_cart,
                     SignUp)
 
@@ -22,6 +23,7 @@ urlpatterns = [
     path('cabinet/favorite_product', favorite_product, name='favorite_product'),
     path('cabinet/shopping_cart', shopping_cart, name='shopping_cart'),
     path('cabinet/shopping_cart/clean_shopping_cart', clean_shopping_cart, name='clean_shopping_cart'),
+    path('cabinet/ordering', ordering, name='ordering'),
     # аутентификация
     path('signup/', SignUp.as_view(), name='signup'),
     path('logout/',

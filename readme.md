@@ -14,6 +14,8 @@
 - FavoriteProduct - вспомогательная модель для избранных товаров
 - ImageProduct - изображения товаров
 - ShoppingCartProduct - модель корзины пользователей 
+- Order - заказы пользователей
+- OrderProduct - модель для хранения товаров (с указанием количества) в заказах
 
 ### Ссылки проекта:
 - index.html - главная страница
@@ -29,6 +31,7 @@
 - auth/cabinet/favorite_product/ - избранные товары пользоватля 
 - auth/cabinet/shopping_cart/ - корзина пользователя 
 - auth/cabinet/shopping_cart/clean_shopping_cart/ - очистка корзины
+- auth/cabinet/ordering/ - оформление заказа
 
 ### Папки проекта:
 - core - приложение Django - фильтры

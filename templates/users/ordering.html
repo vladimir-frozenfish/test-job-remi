@@ -1,0 +1,58 @@
+{% extends "base_cabinet.html" %}
+
+{% load form_filters %}
+
+{% block title %} Оформление заказа {% endblock %}
+
+{% block cabinet_data %}
+<div class="cabinet_caption">Оформление заказа</div>
+
+<div class="product_category">
+      {% for product in products %}
+            <div class="product_order_grid">
+                <div class="product_cart_self padding_order">{{ forloop.counter }}</div>
+                <div class="product_cart_self">{{ product.product.name }}</div>
+                <div class="product_cart_self">{{ product.product.category }}</div>
+                <div class="product_cart_self">Стоимость:</div>
+                <div class="product_cart_self">{{ product.product.price }}</div>
+                <div class="product_cart_self">Количество:</div>
+                <div class="product_cart_self">{{ product.amount }}</div>
+                <div class="product_cart_self">Итого стоимость:</div>
+                <div class="product_cart_self">{% widthratio product.product.price 1 product.amount %}</div>
+            </div>
+      {% endfor %}
+
+      <div class="cost_order">Общая стоимость заказа: {{ total_cost_order }} ₽</div>
+
+
+        <div class="order">
+        <div class="order_block">
+        <div class="login_title">Оформление заказа:</div>
+
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="red_text warning_text">{{ error|escape }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                    <div class="red_text warning_text">{{ error|escape }}</div>
+                {% endfor %}
+            {% endif %}
+
+        <form method="post" action="{% url 'users:ordering' %}" class="login_form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}: {% if field.field.required %}<span class="red_text">*</span>{% endif %}
+                    </label>
+                    <div>{{ field|addclass:'input_text_order' }}</div>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Оформить заказ" class="signup_button">
+        </form>
+        </div>
+</div>
+{% endblock %}

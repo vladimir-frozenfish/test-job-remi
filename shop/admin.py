@@ -89,7 +89,8 @@ class ShoppingCartProductAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'get_order_products', 'status', 'date_ordered', 'date_sent', 'date_completed', 'shipping_method', 'city', 'address', 'comment')
+    list_display = ('id', 'user', 'total_cost', 'get_order_products', 'status', 'is_paid', 'date_ordered', 'date_sent', 'date_completed', 'shipping_method', 'city', 'address', 'comment')
+    readonly_fields = ('date_ordered', 'get_order_products')
     list_filter = ('user',)
     list_display_links = ('id', 'user')
 

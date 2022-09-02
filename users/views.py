@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum, F
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
-from shop.models import ShoppingCartProduct
+from shop.models import OrderProduct, ShoppingCartProduct
 
-from .forms import CreationForm
+from .forms import CreationForm, OrderForm
 
 
 class SignUp(CreateView):
@@ -48,3 +49,36 @@ def clean_shopping_cart(request):
     products.delete()
 
     return redirect('users:shopping_cart')
+
+
+@login_required
+def ordering(request):
+    products = ShoppingCartProduct.objects.filter(user=request.user)
+
+    """получение общей стоимости заказа"""
+    total_cost_order = products.annotate(total_cost=(F('product__price')*F('amount'))).aggregate(Sum('total_cost'))['total_cost__sum']
+
+    template = 'users/ordering.html'
+
+    form = OrderForm(request.POST or None)
+    if form.is_valid():
+        """сохранение заказа"""
+        order = form.save(commit=False)
+        order.user = request.user
+        order.total_cost = total_cost_order
+        order.save()
+
+        """сохранение в заказ товаров"""
+        list_for_products = [OrderProduct(order=order, product=product.product, amount=product.amount) for product in products]
+        OrderProduct.objects.bulk_create(list_for_products)
+
+        """удаление товаров из корзины"""
+        products.delete()
+
+        return redirect('shop:index')
+
+    context = {'products': products,
+               'total_cost_order': total_cost_order,
+               'form': form}
+
+    return render(request, template, context)

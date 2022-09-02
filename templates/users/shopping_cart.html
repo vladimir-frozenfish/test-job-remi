@@ -28,9 +28,9 @@
       {% endfor %}
 
       <div class="buttons_product">
-            <div class="button_header">
+            <a href="{% url 'users:ordering' %}"><div class="button_header">
                   <div>Оформить</div>
-            </div>
+            </div></a>
 
             <form method="post" onsubmit="return confirm('Точно очистить корзину?')" action="{% url 'users:clean_shopping_cart' %}">
                   {% csrf_token %}
