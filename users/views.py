@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
+from shop.models import ShoppingCartProduct
+
 from .forms import CreationForm
 
 
@@ -28,3 +30,16 @@ def favorite_product(request):
     template = 'users/favorite_product.html'
 
     return render(request, template, context)
+
+
+@login_required
+def shopping_cart(request):
+    products = ShoppingCartProduct.objects.filter(user=request.user)
+
+    context = {'products': products,}
+    template = 'users/shopping_cart.html'
+
+    return render(request, template, context)
+
+
+

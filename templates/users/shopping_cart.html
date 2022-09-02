@@ -1,0 +1,46 @@
+{% extends "base_cabinet.html" %}
+
+{% load form_filters %}
+
+{% block title %} Корзина товаров{% endblock %}
+
+{% block cabinet_data %}
+<div class="cabinet_caption">Корзина</div>
+
+{% if products %}
+<div class="product_category">
+      {% for product in products %}
+            <div class="product_cart_grid">
+                  <div class="product_cart_self center_text">{{ forloop.counter }}</div>
+                  <a href="{% url 'shop:product' product.product.id %}"><div><img src="{{ product.product.image_preview.url }}" class="img_category" width="150px"></div></a>
+                  <div class="product_cart_self">
+                        <div>{{ product.product.category }}</div>
+                        <a href="{% url 'shop:product' product.product.id %}"><div>{{ product.product.name }}</div></a>
+                        <div>{{ product.product.description }}</div>
+                        <div>{{ product.product.price }}</div>
+                  </div>
+                  <div class="button_small">-</div>
+                  <div class="product_cart_self center_text">{{ product.amount }}</div>
+                  <div class="button_small">+</div>
+                  <div class="product_cart_self center_text">{% widthratio product.product.price 1 product.amount %}</div>
+                  <div class="button_small">X</div>
+            </div>
+      {% endfor %}
+
+      <div class="buttons_product">
+            <div class="button_header">
+                  <div>Оформить</div>
+            </div>
+
+            <div class="button_header">
+                  <div class="small_text">Очистить корзину</div>
+            </div>
+      </div>
+</div>
+{% else %}
+    <div class="login"><div class="login_block">
+          <div class="login_title">Корзина пуста.</div>
+          Добавьте в корзину товар, чтобы совершить покупку.
+    </div></div>
+{% endif %}
+{% endblock %}

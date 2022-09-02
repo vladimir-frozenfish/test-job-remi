@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Category, ImageProduct, FavoriteProduct, Product
+from .models import Category, ImageProduct, FavoriteProduct, Product, ShoppingCartProduct
 from .forms import OrderingForm
 from .utils import get_all_child_categories, get_category_queue, get_category_tree
 
@@ -96,6 +96,13 @@ def product(request, product_id):
             and FavoriteProduct.objects.filter(user=request.user, product=product).exists()
     )
 
+    """проверка является ли текущий товар в корзине
+    у аутентифицированного пользователя"""
+    is_in_shopping_cart_product = (
+            request.user.is_authenticated
+            and ShoppingCartProduct.objects.filter(user=request.user, product=product).exists()
+    )
+
     template = 'shop/product.html'
 
     context = {
@@ -103,7 +110,8 @@ def product(request, product_id):
         'category_queue': category_queue,
         'category_tree': category_tree,
         'images': images,
-        'is_favorite_product': is_favorite_product
+        'is_favorite_product': is_favorite_product,
+        'is_in_shopping_cart_product': is_in_shopping_cart_product
     }
 
     return render(request, template, context)
@@ -119,6 +127,16 @@ def add_del_favorite(request, product_id):
 
     if not created:
         favorite_product.delete()
+
+    return redirect('shop:product', product_id)
+
+
+@login_required
+def add_product_in_shopping_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if not ShoppingCartProduct.objects.filter(user=request.user, product=product).exists():
+        ShoppingCartProduct.objects.create(user=request.user, product=product)
 
     return redirect('shop:product', product_id)
 

@@ -70,10 +70,6 @@ header {
   border-radius: 4px;
 }
 
-.small_text {
-  font-size: 16px;
-}
-
 .button_header:hover {
   background-color: #e4e4e4;
   border: 1px solid rgb(0, 0, 0);
@@ -84,6 +80,10 @@ header {
 
 .button_header:active {
   background-color: #ffffff;
+}
+
+.small_text {
+  font-size: 14px;
 }
 
 footer {
@@ -393,4 +393,51 @@ aside {
   display: grid;
   row-gap: 10px;
   justify-content: end;
+}
+
+.product_cart_grid {
+  background-color: #ebebeb;
+  padding-top: 10px;
+  padding-right: 10px;
+  display: grid;
+  grid-template-columns: 30px 160px auto 40px 30px 40px 100px 40px;
+  font-size: 18px;
+  grid-column-gap: 4px;
+}
+
+.product_cart_self {
+  /* display: grid; */
+  /* align-items: center; */
+  /* background-color: #ebebeb; */
+  margin: 0px 0px;
+  /* padding-left: 15px; */
+  /* min-height: 35px; */
+}
+
+.center_text {
+  text-align: center;
+  padding-top: 10px;
+}
+
+
+.button_small {
+  display: grid;
+  place-items: center;
+  background-color: #cfcccc;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 4px;
+}
+
+.button_small:hover {
+  background-color: #e4e4e4;
+  border: 1px solid rgb(0, 0, 0);
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+}
+
+.button_small:active {
+  background-color: #ffffff;
 }

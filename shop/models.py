@@ -176,6 +176,7 @@ class ShoppingCartProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField(
         validators=[validate_above_zero],
+        default=1,
         verbose_name='Количество товаров'
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
