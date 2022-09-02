@@ -10,6 +10,17 @@ from .validators import (validate_category_image_size,
                          validate_above_zero)
 
 
+class OrderStatus:
+    ORDERED = 'оформлен'
+    SENT = 'отправлен'
+    COMPLETED = 'закончен'
+
+
+class ShippingMethod:
+    MAIL = 'почта'
+    CDEK = 'СДЭК'
+
+
 class User(AbstractUser):
     email = models.EmailField(max_length=254, unique=True)
     favorite_product = models.ManyToManyField('Product',
@@ -196,3 +207,70 @@ class ShoppingCartProduct(models.Model):
     def __str__(self):
         return (f'{self.product} - '
                 f'{self.amount} шт.')
+
+
+class Order(models.Model):
+    status_order = (
+        (OrderStatus.ORDERED, OrderStatus.ORDERED),
+        (OrderStatus.SENT, OrderStatus.SENT),
+        (OrderStatus.COMPLETED, OrderStatus.COMPLETED),
+    )
+    method_shipment = (
+        (ShippingMethod.MAIL, ShippingMethod.MAIL),
+        (ShippingMethod.CDEK, ShippingMethod.CDEK),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    product = models.ManyToManyField(
+        'Product',
+        through='OrderProduct',
+        related_name='order'
+    )
+    status = models.CharField(max_length=20, choices=status_order, default=OrderStatus.ORDERED, verbose_name='Статус заказа')
+    date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Дата оформления заказа')
+    date_sent = models.DateTimeField(blank=True, verbose_name='Дата отправки заказа')
+    date_completed = models.DateTimeField(blank=True, verbose_name='Дата завершения заказа')
+    city = models.CharField(max_length=50, default='Город доставки заказа')
+    address = models.CharField(max_length=150, default='Адрес доставки заказа')
+    shipping_method = models.CharField(max_length=30, choices=status_order, default=ShippingMethod.MAIL, verbose_name='Способ доставки заказа')
+    comment = models.CharField(max_length=250, blank=True, verbose_name='Комментарии к заказу')
+
+    def get_order_products(self):
+        products = OrderProduct.objects.filter(order=self.id)
+        return ", ".join((map(str, products)))
+
+    get_order_products.short_description = 'Товары в заказе'
+
+    class Meta:
+        verbose_name_plural = 'Заказы'
+        verbose_name = 'Заказ'
+        ordering = ['id']
+
+
+class OrderProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    amount = models.PositiveSmallIntegerField(
+        validators=[validate_above_zero],
+        default=1,
+        verbose_name='Количество товаров'
+    )
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Товары в заказе'
+        verbose_name = 'Товар в заказе'
+        ordering = ['order']
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['product', 'order'],
+                name='unique_product_order'
+            )
+        ]
+
+    def __str__(self):
+        return (f'{self.product} - '
+                f'{self.amount} шт.')
+
+
+
