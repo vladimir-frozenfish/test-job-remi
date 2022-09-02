@@ -19,11 +19,11 @@
                         <div>{{ product.product.description }}</div>
                         <div>{{ product.product.price }}</div>
                   </div>
-                  <div class="button_small">-</div>
+                  <a href="{% url 'shop:reduce_product_in_shopping_cart' product.product.id %}"><div class="button_small">-</div></a>
                   <div class="product_cart_self center_text">{{ product.amount }}</div>
-                  <div class="button_small">+</div>
+                  <a href="{% url 'shop:increase_product_in_shopping_cart' product.product.id %}"><div class="button_small">+</div></a>
                   <div class="product_cart_self center_text">{% widthratio product.product.price 1 product.amount %}</div>
-                  <div class="button_small">X</div>
+                  <a href="{% url 'shop:delete_product_in_shopping_cart' product.product.id %}"><div class="button_small">X</div></a>
             </div>
       {% endfor %}
 

@@ -10,9 +10,11 @@
             <a href="{% url 'users:cabinet' %}"><div class="button_header">
                 <div>Кабинет</div>
             </div></a>
-            <a href="{% url 'users:logout' %}"><div class="button_header">
-                <div>Выход</div>
-            </div></a>
+
+            <form method="post" onsubmit="return confirm('Вы точно хотите выйти?')" action="{% url 'users:logout' %}">
+                  {% csrf_token %}
+                  <input type="submit" value="Выход" class="button_form">
+            </form>
         {% else %}
             <a href="{% url 'users:signup' %}"><div class="button_header">
                 <div>Регистрация</div>

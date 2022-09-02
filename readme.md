@@ -21,10 +21,14 @@
 - product/<id>/ - страница товара
 - product/<id>/add_del_favorite/ - добавление/удаление товара из избранного для аутентифицированного пользователя
 - product/<id>/add_product_in_shopping_cart/ - добавление товара в корзину
+- product/<id>/increase_product_in_shopping_cart/ - увеличение товара в корзине на единицу
+- product/<id>/reduce_product_in_shopping_cart/ - уменьшение товара в корзине на единицу
+- product/<id>/delete_product_in_shopping_cart/ - удаление товара из корзины
 - auth/ - аутентификация пользователей
 - auth/cabinet/ - личный кабинет пользователя
 - auth/cabinet/favorite_product/ - избранные товары пользоватля 
 - auth/cabinet/shopping_cart/ - корзина пользователя 
+- auth/cabinet/shopping_cart/clean_shopping_cart/ - очистка корзины
 
 ### Папки проекта:
 - core - приложение Django - фильтры

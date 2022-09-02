@@ -141,5 +141,31 @@ def add_product_in_shopping_cart(request, product_id):
     return redirect('shop:product', product_id)
 
 
+@login_required
+def increase_product_in_shopping_cart(request, product_id):
+    product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+
+    product.amount += 1
+    product.save()
+
+    return redirect('users:shopping_cart')
 
 
+@login_required
+def reduce_product_in_shopping_cart(request, product_id):
+    product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+
+    if product.amount > 1:
+        product.amount -= 1
+        product.save()
+
+    return redirect('users:shopping_cart')
+
+
+@login_required
+def delete_product_in_shopping_cart(request, product_id):
+    product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+
+    product.delete()
+
+    return redirect('users:shopping_cart')

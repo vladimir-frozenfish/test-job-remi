@@ -22,6 +22,7 @@ urlpatterns = [
     path('cabinet/favorite_product', favorite_product, name='favorite_product'),
     path('cabinet/shopping_cart', shopping_cart, name='shopping_cart'),
     path('cabinet/shopping_cart/clean_shopping_cart', clean_shopping_cart, name='clean_shopping_cart'),
+    # аутентификация
     path('signup/', SignUp.as_view(), name='signup'),
     path('logout/',
          LogoutView.as_view(),
