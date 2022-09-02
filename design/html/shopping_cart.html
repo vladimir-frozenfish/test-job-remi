@@ -81,10 +81,10 @@
                   <div>Оформить</div>
                 </div>
               
-
-                <div class="button_header">
-                  <div class="small_text">Очистить корзину</div>
-                </div>
+                <form onsubmit="return confirm('Точно очистить корзину?')" action="">
+                  <input type="submit" value="Очистить корзину" class="button_form small_text">
+                </form>
+                
               </div>
               
             </div>

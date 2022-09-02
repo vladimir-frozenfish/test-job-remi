@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
@@ -42,4 +42,9 @@ def shopping_cart(request):
     return render(request, template, context)
 
 
+@login_required
+def clean_shopping_cart(request):
+    products = ShoppingCartProduct.objects.filter(user=request.user)
+    products.delete()
 
+    return redirect('users:shopping_cart')
