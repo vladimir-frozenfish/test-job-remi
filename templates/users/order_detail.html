@@ -1,0 +1,45 @@
+{% extends "base_cabinet.html" %}
+
+{% load form_filters %}
+
+{% block title %} Детали заказа {% endblock %}
+
+{% block cabinet_data %}
+
+    <div class="login">
+
+        <div class="login_block">
+
+            {% if user.is_authenticated %}
+                <div class="login_title">Заказ № {{ order.id }} {{ order.status }}</div>
+                {% if order.status == 'оформлен' %}
+                В ближайшее время с вами свяжеться наш менеджер для уточнения деталей и отправки заказа. Спасибо, что выбрали наш магазин.
+                {% endif %}
+            {% else %}
+                <span class="red_text warning_text">
+                    Войдите в личный кабинет, если хотите оформить заказ.
+                </span>
+            {% endif %}
+        </div>
+
+    </div>
+
+      {% for product in products %}
+        <a href="{% url 'shop:product' product.product.id %}" target="_blank">
+            <div class="product_order_grid">
+                <div class="product_cart_self padding_order">{{ forloop.counter }}</div>
+                <div class="product_cart_self">{{ product.product.name }}</div>
+                <div class="product_cart_self">{{ product.product.category }}</div>
+                <div class="product_cart_self">Стоимость:</div>
+                <div class="product_cart_self">{{ product.product.price }}</div>
+                <div class="product_cart_self">Количество:</div>
+                <div class="product_cart_self">{{ product.amount }}</div>
+                <div class="product_cart_self">Итого стоимость:</div>
+                <div class="product_cart_self">{% widthratio product.product.price 1 product.amount %}</div>
+            </div>
+        </a>
+      {% endfor %}
+
+      <div class="cost_order">Общая стоимость заказа: {{ order.total_cost }} ₽</div>
+
+{% endblock %}

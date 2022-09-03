@@ -3,6 +3,6 @@
     <a href="{% url 'users:password_change_form' %}"><div class="category_caption">Сменить пароль</div></a>
     <div class="empty"> </div>
     <a href="{% url 'users:shopping_cart' %}"><div class="category_caption">Моя корзина</div></a>
-    <a href=""><div class="category_caption">Мои заказы</div></a>
+    <a href="{% url 'users:order_list' %}"><div class="category_caption">Мои заказы</div></a>
     <a href="{% url 'users:favorite_product' %}"><div class="category_caption">Избранные товары</div></a>
 </div>

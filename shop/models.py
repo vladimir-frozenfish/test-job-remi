@@ -246,7 +246,7 @@ class Order(models.Model):
     class Meta:
         verbose_name_plural = 'Заказы'
         verbose_name = 'Заказ'
-        ordering = ['id']
+        ordering = ['-id']
 
     def __str__(self):
         return (f'{self.user} - '

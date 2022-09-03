@@ -12,6 +12,8 @@ from .views import (cabinet,
                     clean_shopping_cart,
                     favorite_product,
                     ordering,
+                    order_detail,
+                    order_list,
                     shopping_cart,
                     SignUp)
 
@@ -24,6 +26,8 @@ urlpatterns = [
     path('cabinet/shopping_cart', shopping_cart, name='shopping_cart'),
     path('cabinet/shopping_cart/clean_shopping_cart', clean_shopping_cart, name='clean_shopping_cart'),
     path('cabinet/ordering', ordering, name='ordering'),
+    path('cabinet/order_detail/<int:order_id>', order_detail, name='order_detail'),
+    path('cabinet/order_list', order_list, name='order_list'),
     # аутентификация
     path('signup/', SignUp.as_view(), name='signup'),
     path('logout/',

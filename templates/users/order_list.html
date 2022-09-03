@@ -1,0 +1,29 @@
+{% extends "base_cabinet.html" %}
+
+{% load form_filters %}
+
+{% block title %} Ваши заказы {% endblock %}
+
+{% block cabinet_data %}
+      {% for order in orders %}
+        <a href="{% url 'users:order_detail' order.id %}">
+            <div class="product_order_list_grid">
+                <div class="product_cart_self padding_order">{{ order.id }}</div>
+                <div class="product_cart_self">Дата оформления:</div>
+                <div class="product_cart_self">{{ order.date_ordered }}</div>
+                <div class="product_cart_self">Стоимость:</div>
+                <div class="product_cart_self">{{ order.total_cost }}</div>
+                <div class="product_cart_self">Статус оплаты:</div>
+                <div class="product_cart_self">
+                    {% if order.is_paid %}
+                        Оплачен
+                    {% else %}
+                        Не оплачен
+                    {% endif %}
+                </div>
+                <div class="product_cart_self">Статус заказа:</div>
+                <div class="product_cart_self">{{ order.status }}</div>
+            </div>
+        </a>
+      {% endfor %}
+{% endblock %}

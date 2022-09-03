@@ -9,6 +9,7 @@
 
 <div class="product_category">
       {% for product in products %}
+        <a href="{% url 'shop:product' product.product.id %}" target="_blank">
             <div class="product_order_grid">
                 <div class="product_cart_self padding_order">{{ forloop.counter }}</div>
                 <div class="product_cart_self">{{ product.product.name }}</div>
@@ -20,6 +21,7 @@
                 <div class="product_cart_self">Итого стоимость:</div>
                 <div class="product_cart_self">{% widthratio product.product.price 1 product.amount %}</div>
             </div>
+        </a>
       {% endfor %}
 
       <div class="cost_order">Общая стоимость заказа: {{ total_cost_order }} ₽</div>
@@ -41,7 +43,7 @@
                 {% endfor %}
             {% endif %}
 
-        <form method="post" action="{% url 'users:ordering' %}" class="login_form">
+        <form method="post" onsubmit="return confirm('Все данные правильные? Оформить заказ?')" action="{% url 'users:ordering' %}" class="login_form">
             {% csrf_token %}
             {% for field in form %}
                 <div>
