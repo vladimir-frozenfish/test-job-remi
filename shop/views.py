@@ -1,12 +1,22 @@
 from collections import deque
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import Category, ImageProduct, FavoriteProduct, Product, ShoppingCartProduct
 from .forms import OrderingForm
 from .utils import get_all_child_categories, get_category_queue, get_category_tree
+
+
+def page_paginator(data, request):
+    """функция разделения записей на несколько страниц"""
+    post_list = Paginator(data, settings.PAGINATOR_COUNT)
+    page_number = request.GET.get('page')
+
+    return post_list.get_page(page_number)
 
 
 def index(request):
@@ -33,6 +43,14 @@ def category(request, slug):
     category = get_object_or_404(Category, slug=slug)
     child_categorys = category.child_category.all()
 
+    """получение списка категорий для отображения
+        на HTML очереди категорий"""
+    category_queue = get_category_queue(category)
+
+    """получение дерева категорий"""
+    category_queue_for_tree = deque(category_queue)
+    category_tree = get_category_tree(category_queue_for_tree)
+
     """получение продуктов"""
     if child_categorys:
         """если у текущей категории есть дочерние категории, 
@@ -54,19 +72,16 @@ def category(request, slug):
             current_order = form_ordering.cleaned_data.get('order')
             products = products.order_by(current_order)
 
+    """пагинация"""
+    page_obj = page_paginator(products, request)
+
     template = 'shop/category.html'
 
-    """получение списка категорий для отображения
-    на HTML очереди категорий"""
-    category_queue = get_category_queue(category)
-
-    """получение дерева категорий"""
-    category_queue_for_tree = deque(category_queue)
-    category_tree = get_category_tree(category_queue_for_tree)
 
     context = {
         'category': category,
         'products': products,
+        'page_obj': page_obj,
         'child_categorys': child_categorys,
         'category_queue': category_queue,
         'category_tree': category_tree,

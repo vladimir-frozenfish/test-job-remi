@@ -32,6 +32,8 @@
 - auth/cabinet/shopping_cart/ - корзина пользователя 
 - auth/cabinet/shopping_cart/clean_shopping_cart/ - очистка корзины
 - auth/cabinet/ordering/ - оформление заказа
+- auth/cabinet/order_detail/<id>/ - детали заказа
+- auth/cabinet/order_list/ - все заказы пользователя
 
 ### Папки проекта:
 - core - приложение Django - фильтры

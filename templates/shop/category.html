@@ -49,7 +49,19 @@
         </div>
         <div class="dividing_line_filter"></div>
 
-        {% include "includes/product_list.html" %}
+        <!-- отображение товаров с пагинацией-->
+        <div class="grid_category">
+        {% for product in page_obj %}
+            <div>
+                <a href="{% url 'shop:product' product.id %}">
+                <div><img src="{{ product.image_preview.url }}" class="img_category"></div>
+                <div>{{ product.brand.name }} {{ product.name }}</div>
+                <div>{{ product.price }} ₽</div>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+        {% include "includes/paginator.html" %}
     </div>
 </div>
 

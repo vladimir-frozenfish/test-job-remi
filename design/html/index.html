@@ -127,11 +127,43 @@
                         </a>
                     </div>
                 </div>
+
+
+                <!-- Пагинация -->
+                
+                <nav class="pagination_block">
+                <ul class="pagination">
+                    <li><a href="?page=1">
+                        Первая</a>
+                    </li>
+                    <li>
+                        <a 
+                        href="?page={{ page_obj.previous_page_number }}">
+                        Предыдущая
+                        </a>
+                    </li>
+                        <li>
+                            <span>{{ i }}</span>
+                        </li>
+
+                        <li>
+                            <a href="?page={{ i }}">{{ i }}</a>
+                        </li>
+
+                    <li>
+                        <a href="?page={{ page_obj.next_page_number }}">
+                        Следующая
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">
+                        Последняя
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+
             </div>
-        
-        
-
-
     </main>
 
     <footer>

@@ -522,3 +522,17 @@ aside {
   padding: 10px;
   font-size: 14px;
 }
+
+.pagination_block {
+  font-size: 20px;
+  margin-bottom: 10px;
+  background-color: #c2c2c2;
+}
+
+.pagination {
+  display:flex;
+  gap: 10px;
+  justify-content: center;
+  padding-left:0;
+  list-style:none
+}
