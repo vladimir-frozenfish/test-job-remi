@@ -27,6 +27,10 @@
 
 
     <div class="header_grid">
+        <form action="{% url 'shop:search_product' %}">
+            <input type="text" class="input_search" name="q">
+            <input type="submit" value="Поиск" class="button_search">
+        </form>
         <a href="{% url 'users:shopping_cart' %}"><div class="button_header">Корзина</div></a>
     </div>
 </div>

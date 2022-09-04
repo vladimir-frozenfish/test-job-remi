@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load form_filters %}
+
+{% block title %} Интернет магазин. {{ category.name }} {% endblock %}
+
+{% block content %}
+
+<div class="caption">Поиск товаров по запросу {{ q }}</div>
+
+<div class="shop_main">
+
+    <aside>
+        <div>
+            <a href="{% url 'shop:index' %}"><div class="category_caption">Категории</div></a>
+
+            {% for category in categorys %}
+                <div><a href="{% url 'shop:category' category.slug %}"> {{ category.name }} </a></div>
+            {% endfor %}
+
+        </div>
+        <div class="dividing_vertical_line"></div>
+    </aside>
+
+    {% if q %}
+    <div class="product_category">
+        {% comment %}
+        <!-- блок отображения сортировки -->
+        <div class="dividing_line_filter"></div>
+        <div class="flex_horizontal">
+            <form method="get">
+                {{ form_ordering.order|addclass:'sort_select' }}
+                <input type="submit" name="ordering" value="Сортировать" class="button_sort">
+            </form>
+        </div>
+        <div class="dividing_line_filter"></div>
+        {% endcomment %}
+
+        {% include "includes/product_list.html" %}
+    </div>
+    {% else %}
+        <div class="login"><div class="login_block">
+              Запрос поиска товаров пустой - введите запрос в поиске товаров.
+        </div></div>
+    {% endif %}
+</div>
+
+{% endblock %}

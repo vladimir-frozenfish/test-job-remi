@@ -82,6 +82,35 @@ header {
   background-color: #ffffff;
 }
 
+.button_search {
+  font-family: 'Minion Pro';
+  border: 0px;
+  background-color: #cfcccc;
+  width: 70px;
+  height: 34px;
+  font-size: 20px;
+  border-radius: 4px;
+}
+
+.button_search:hover {
+  background-color: #e4e4e4;
+  border: 1px solid rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.button_search:active {
+  background-color: #ffffff;
+}
+
+.input_search {
+  padding-left: 10px;
+  width: 150px;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid rgb(0, 0, 0);
+}
+
 footer {
   height: 70px;
   background: #f0efef;

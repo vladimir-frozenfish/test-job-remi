@@ -26,6 +26,7 @@
 - product/<id>/increase_product_in_shopping_cart/ - увеличение товара в корзине на единицу
 - product/<id>/reduce_product_in_shopping_cart/ - уменьшение товара в корзине на единицу
 - product/<id>/delete_product_in_shopping_cart/ - удаление товара из корзины
+- product/search_product/ - поиск товаров
 - auth/ - аутентификация пользователей
 - auth/cabinet/ - личный кабинет пользователя
 - auth/cabinet/favorite_product/ - избранные товары пользоватля 

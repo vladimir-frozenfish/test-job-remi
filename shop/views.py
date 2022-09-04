@@ -1,22 +1,12 @@
 from collections import deque
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import Category, ImageProduct, FavoriteProduct, Product, ShoppingCartProduct
 from .forms import OrderingForm
-from .utils import get_all_child_categories, get_category_queue, get_category_tree
-
-
-def page_paginator(data, request):
-    """функция разделения записей на несколько страниц"""
-    post_list = Paginator(data, settings.PAGINATOR_COUNT)
-    page_number = request.GET.get('page')
-
-    return post_list.get_page(page_number)
+from .utils import get_all_child_categories, get_category_queue, get_category_tree, page_paginator
 
 
 def index(request):
@@ -184,3 +174,28 @@ def delete_product_in_shopping_cart(request, product_id):
     product.delete()
 
     return redirect('users:shopping_cart')
+
+
+def search_product(request):
+    """страница поиска товаров"""
+
+    """получение начальных категорий, тех у которых нет
+    родительских категорий"""
+    categorys_main = Category.objects.filter(parent_category__isnull=True)
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        multi_q = Q(Q(name__iregex=q) | Q(category__name__iregex=q))
+        products = Product.objects.filter(multi_q)
+    else:
+        q = ''
+        products = None
+
+    template = 'shop/search_product.html'
+
+    context = {'categorys': categorys_main,
+               'products': products,
+               'q': q
+               }
+
+    return render(request, template, context)

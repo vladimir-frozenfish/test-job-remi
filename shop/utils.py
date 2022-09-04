@@ -1,5 +1,8 @@
 from collections import namedtuple
 
+from django.conf import settings
+from django.core.paginator import Paginator
+
 from .models import Category
 
 
@@ -71,4 +74,12 @@ def get_all_child_categories(child_categories):
         all_child_categories.extend(list(current_category.child_category.all()))
 
     return all_child_categories
+
+
+def page_paginator(data, request):
+    """функция разделения записей на несколько страниц"""
+    post_list = Paginator(data, settings.PAGINATOR_COUNT)
+    page_number = request.GET.get('page')
+
+    return post_list.get_page(page_number)
 
