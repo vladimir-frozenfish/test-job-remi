@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Ошибка 404{% endblock %}
+
+{% block content %}
+
+   <div class="login">
+      <div class="login_block">
+        <div class="login_title">Ошибка 404:</div>
+        <div class="red_text warning_text">Страницы с адресом {{ path }} не существует</div>
+      </div>
+   </div>
+
+{% endblock %}

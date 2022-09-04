@@ -101,7 +101,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -143,8 +142,11 @@ dmypy.json
 .history/
 
 .mypy_cache
-/db.sqlite3
 /temp.py
-/dump_before_order.json
-/dump.json
-/dump1.json
+/dump_data/dump_before_order.json
+/dump_data/dump.json
+/dump_data/dump1.json
+/design/
+/dump_data/dump04-09.json
+/dump_data/
+/static/
