@@ -46,6 +46,9 @@
 - api/auth/token/logout/ - POST - удаление токена
 - api/auth/users/me/ - GET
 - api/auth/set_password/ - POST
+#### Products:
+- api/products/ - GET
+- api/products/{id} - GET
 
 ### Папки проекта:
 - api - приложение Django - API
