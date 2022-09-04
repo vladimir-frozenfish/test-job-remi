@@ -51,6 +51,10 @@ header {
   border: 1px solid rgb(0, 0, 0);
 }
 
+.text_user {
+  font-size: 20px;
+}
+
 .red_text {
   color: rgb(199, 0, 0);
 }
