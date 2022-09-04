@@ -23,9 +23,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'shop.apps.ShopConfig',
     'core.apps.CoreConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE = [
@@ -117,3 +121,32 @@ PRODUCT_PREVIEW_IMAGE_RESOLUTION = (250, 250)
 PRODUCT_IMAGE_RESOLUTION = (800, 800)
 PAGINATOR_COUNT = 2
 
+"""настроки для API"""
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 3,
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'username',
+    'SERIALIZERS': {
+        'user': 'api.serializers.UserSerializer',
+        'current_user': 'api.serializers.UserSerializer',
+    }
+}
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://*localhost',
+    'https://*localhost',
+    'http://*127.0.0.1',
+    'https://*127.0.0.1',
+    'http://*45.141.103.185',
+    'https://*45.141.103.185'
+]

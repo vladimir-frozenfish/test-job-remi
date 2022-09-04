@@ -2,6 +2,7 @@
 ## Работающий проект можно посмотреть - <http://45.141.103.185>
 
 ### Приложения проекта:
+- api - приложения для взаимодействия посредством API
 - main - основная папка - settings.py
 - shop - описание моделей, views и т.п.
 - core - фильтры и т.п.
@@ -37,7 +38,17 @@
 - auth/cabinet/order_detail/<id>/ - детали заказа
 - auth/cabinet/order_list/ - все заказы пользователя
 
+### Эндпоинты API:
+#### Users:
+- api/auth/users/ - GET, POST(регистрация пользователя)
+- api/auth/users/{id} - GET, PATCH, DELETE
+- api/auth/token/login/ - POST - полуение токена
+- api/auth/token/logout/ - POST - удаление токена
+- api/auth/users/me/ - GET
+- api/auth/set_password/ - POST
+
 ### Папки проекта:
+- api - приложение Django - API
 - core - приложение Django - фильтры
 - design - дизайн приложения - html, css
 - main - главная папка проекта Django - setting.py
