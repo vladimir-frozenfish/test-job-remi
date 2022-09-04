@@ -29,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.SlugField('name')
     images = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -63,11 +64,10 @@ class ProductSerializer(serializers.ModelSerializer):
             product=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
-        """возвращает в поле is_in_shopping_cart True если текущий пользователь
-        поместил товар в корзину"""
+        """возвращает в поле is_in_shopping_cart False если текущий пользователь не
+        поместил товар в корзину или количество помещенных единиц данного товара"""
         request_user = self.context['request'].user
-        if request_user.is_anonymous:
+
+        if request_user.is_anonymous or not ShoppingCartProduct.objects.filter(user=request_user, product=obj).exists():
             return False
-        return ShoppingCartProduct.objects.filter(
-            user=request_user,
-            product=obj).exists()
+        return ShoppingCartProduct.objects.get(user=request_user, product=obj).amount

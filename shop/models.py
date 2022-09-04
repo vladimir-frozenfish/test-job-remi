@@ -184,7 +184,7 @@ class ImageProduct(models.Model):
 
 
 class ShoppingCartProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart')
     amount = models.PositiveSmallIntegerField(
         validators=[validate_above_zero],
         default=1,
