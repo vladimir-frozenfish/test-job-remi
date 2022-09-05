@@ -1,5 +1,7 @@
-from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
+
 
 from shop.models import (ImageProduct,
                          FavoriteProduct,
@@ -71,3 +73,53 @@ class ProductSerializer(serializers.ModelSerializer):
         if request_user.is_anonymous or not ShoppingCartProduct.objects.filter(user=request_user, product=obj).exists():
             return False
         return ShoppingCartProduct.objects.get(user=request_user, product=obj).amount
+
+
+class ProductFavoriteSerializer(serializers.ModelSerializer):
+    """сериализатор для добавления рецепта в избранное"""
+    user = UserSerializer(read_only=True)
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        fields = ('user', 'product')
+        model = FavoriteProduct
+
+    def validate(self, data):
+        user = self.context['request'].user
+        product_id = self.context['view'].kwargs.get(['product_id'][0])
+        product = get_object_or_404(Product, id=product_id)
+
+        if (self.context['request'].method == 'POST'
+                and FavoriteProduct.objects.filter(
+                    user=user,
+                    product=product).exists()):
+            raise serializers.ValidationError(
+                {'message': 'Вы уже добавили этот товар в избранное'}
+            )
+
+        return data
+
+
+class ProductShoppingCarSerializer(serializers.ModelSerializer):
+    """сериализатор для добавления товара в корзину"""
+    user = UserSerializer(read_only=True)
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        fields = ('user', 'product')
+        model = ShoppingCartProduct
+
+    def validate(self, data):
+        user = self.context['request'].user
+        product_id = self.context['view'].kwargs.get(['product_id'][0])
+        product = get_object_or_404(Product, id=product_id)
+
+        if (self.context['request'].method == 'POST'
+                and ShoppingCartProduct.objects.filter(
+                    user=user,
+                    product=product).exists()):
+            raise serializers.ValidationError(
+                {'message': 'Вы уже добавили этот товар в корзину'}
+            )
+
+        return data
