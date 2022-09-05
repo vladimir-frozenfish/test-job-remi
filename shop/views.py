@@ -4,9 +4,16 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Category, ImageProduct, FavoriteProduct, Product, ShoppingCartProduct
+from .models import (Category,
+                     ImageProduct,
+                     FavoriteProduct,
+                     Product,
+                     ShoppingCartProduct)
 from .forms import OrderingForm
-from .utils import get_all_child_categories, get_category_queue, get_category_tree, page_paginator
+from .utils import (get_all_child_categories,
+                    get_category_queue,
+                    get_category_tree,
+                    page_paginator)
 
 
 def index(request):
@@ -19,7 +26,9 @@ def index(request):
     """получение продуктов отсортированных 
     по количеству добавлений в избранное - 
     получаем 3 таких продукта"""
-    products = Product.objects.all().annotate(favorite_count=Count('favorite')).order_by('-favorite_count')[:3]
+    products = Product.objects.all().annotate(
+        favorite_count=Count('favorite')
+    ).order_by('-favorite_count')[:3]
 
     template = 'shop/index.html'
 
@@ -44,8 +53,8 @@ def category(request, slug):
     """получение продуктов"""
     if child_categorys:
         """если у текущей категории есть дочерние категории, 
-        то сначала получаем все дочерние категории вглубину до конца от текущей,
-        потом получаем все товары в этих категориях"""
+        то сначала получаем все дочерние категории вглубину до 
+        конца от текущей, потом получаем все товары в этих категориях"""
         all_child_categories = get_all_child_categories(child_categorys)
         products = Product.objects.filter(category__in=all_child_categories)
     else:
@@ -66,7 +75,6 @@ def category(request, slug):
     page_obj = page_paginator(products, request)
 
     template = 'shop/category.html'
-
 
     context = {
         'category': category,
@@ -98,14 +106,18 @@ def product(request, product_id):
     у аутентифицированного пользователя"""
     is_favorite_product = (
             request.user.is_authenticated
-            and FavoriteProduct.objects.filter(user=request.user, product=product).exists()
+            and FavoriteProduct.objects.filter(
+        user=request.user, product=product
+    ).exists()
     )
 
     """проверка является ли текущий товар в корзине
     у аутентифицированного пользователя"""
     is_in_shopping_cart_product = (
             request.user.is_authenticated
-            and ShoppingCartProduct.objects.filter(user=request.user, product=product).exists()
+            and ShoppingCartProduct.objects.filter(
+        user=request.user, product=product
+    ).exists()
     )
 
     template = 'shop/product.html'
@@ -140,7 +152,9 @@ def add_del_favorite(request, product_id):
 def add_product_in_shopping_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
-    if not ShoppingCartProduct.objects.filter(user=request.user, product=product).exists():
+    if not ShoppingCartProduct.objects.filter(
+            user=request.user, product=product
+    ).exists():
         ShoppingCartProduct.objects.create(user=request.user, product=product)
 
     return redirect('shop:product', product_id)
@@ -148,7 +162,9 @@ def add_product_in_shopping_cart(request, product_id):
 
 @login_required
 def increase_product_in_shopping_cart(request, product_id):
-    product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+    product = get_object_or_404(
+        ShoppingCartProduct, product__id=product_id, user=request.user
+    )
 
     product.amount += 1
     product.save()
@@ -158,7 +174,9 @@ def increase_product_in_shopping_cart(request, product_id):
 
 @login_required
 def reduce_product_in_shopping_cart(request, product_id):
-    product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+    product = get_object_or_404(
+        ShoppingCartProduct, product__id=product_id, user=request.user
+    )
 
     if product.amount > 1:
         product.amount -= 1
@@ -169,7 +187,9 @@ def reduce_product_in_shopping_cart(request, product_id):
 
 @login_required
 def delete_product_in_shopping_cart(request, product_id):
-    product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+    product = get_object_or_404(
+        ShoppingCartProduct, product__id=product_id, user=request.user
+    )
 
     product.delete()
 

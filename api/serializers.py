@@ -14,14 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
-        fields = (
-                'email',
-                'id',
-                'username',
-                'first_name',
-                'last_name',
-                'password'
-            )
+        fields = ('email',
+                  'id',
+                  'username',
+                  'first_name',
+                  'last_name',
+                  'password')
         model = User
 
     def create(self, validated_data):
@@ -66,13 +64,19 @@ class ProductSerializer(serializers.ModelSerializer):
             product=obj).exists()
 
     def get_is_in_shopping_cart(self, obj):
-        """возвращает в поле is_in_shopping_cart False если текущий пользователь не
-        поместил товар в корзину или количество помещенных единиц данного товара"""
+        """возвращает в поле is_in_shopping_cart False если
+        текущий пользователь не поместил товар в корзину или
+        количество помещенных единиц данного товара"""
         request_user = self.context['request'].user
 
-        if request_user.is_anonymous or not ShoppingCartProduct.objects.filter(user=request_user, product=obj).exists():
+        if (request_user.is_anonymous
+                or not ShoppingCartProduct.objects.filter(
+                    user=request_user, product=obj
+                ).exists()):
             return False
-        return ShoppingCartProduct.objects.get(user=request_user, product=obj).amount
+        return ShoppingCartProduct.objects.get(
+            user=request_user, product=obj
+        ).amount
 
 
 class ProductFavoriteSerializer(serializers.ModelSerializer):

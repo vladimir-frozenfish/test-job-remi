@@ -37,27 +37,34 @@ def get_category_tree(category_queue, nested=0):
 
     current_category = category_queue.popleft()
     """получаем родственные категории текущей категории"""
-    related_categories = Category.objects.filter(parent_category=current_category.parent_category)
+    related_categories = Category.objects.filter(
+        parent_category=current_category.parent_category
+    )
 
     for related_category in related_categories:
         """добавляем родственную категорию в дерево"""
         category_tree.append(CFT(related_category, nested, ''))
-        """категория совпадает, с той которая взята из очереди, то к ней применяем 
-        рекурсивно эту же функцию"""
+        """категория совпадает, с той которая взята из очереди, 
+        то к ней применяем рекурсивно эту же функцию"""
         if related_category.slug == current_category.slug:
             if category_queue:
-                category_tree_temp = get_category_tree(category_queue, nested + 1)
+                category_tree_temp = get_category_tree(category_queue,
+                                                       nested + 1)
                 category_tree.extend(category_tree_temp)
             else:
                 """если очередь пуста, то значит текущая категория активна
-                меняем ей ключ на активный, а также добавляем в дерево категорий
-                дочерние категории текущей"""
+                меняем ей ключ на активный, а также добавляем 
+                в дерево категорий дочерние категории текущей"""
 
                 """так как используются именованные кортежи и менять их нельзя,
                 то сначала последнюю категорию забираем из дерева каталогов, 
                 а потом опять добавляем, то с меткой, что категория активна"""
                 category_temp = category_tree.pop()
-                category_tree.append(CFT(category_temp.object, category_temp.nested, 'category_active'))
+                category_tree.append(
+                    CFT(category_temp.object,
+                        category_temp.nested,
+                        'category_active')
+                )
 
                 child_categories = category_temp.object.child_category.all()
                 for child_category in child_categories:
@@ -71,7 +78,9 @@ def get_all_child_categories(child_categories):
     all_child_categories = list(child_categories)
 
     for current_category in all_child_categories:
-        all_child_categories.extend(list(current_category.child_category.all()))
+        all_child_categories.extend(
+            list(current_category.child_category.all())
+        )
 
     return all_child_categories
 
@@ -82,4 +91,3 @@ def page_paginator(data, request):
     page_number = request.GET.get('page')
 
     return post_list.get_page(page_number)
-

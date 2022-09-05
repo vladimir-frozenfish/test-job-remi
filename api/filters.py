@@ -4,7 +4,9 @@ from shop.models import Product
 
 
 class ProductFilter(FilterSet):
-    category = CharFilter(field_name='category__slug', method='filter_category')
+    category = CharFilter(
+        field_name='category__slug', method='filter_category'
+    )
 
     is_favorited = filters.BooleanFilter(
         method="filter_is_favorited"

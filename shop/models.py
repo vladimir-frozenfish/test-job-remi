@@ -63,7 +63,8 @@ class Category(models.Model):
         verbose_name='Изображение категории',
         help_text=mark_safe(f'<span style="color:red; font-size:14px;">'
                             f'Разрешение изображения должно быть: '
-                            f'{settings.CATEGORY_IMAGE_RESOLUTION[0]}*{settings.CATEGORY_IMAGE_RESOLUTION[1]}'
+                            f'{settings.CATEGORY_IMAGE_RESOLUTION[0]}'
+                            f'*{settings.CATEGORY_IMAGE_RESOLUTION[1]}'
                             f'</span>')
     )
     parent_category = models.ForeignKey(
@@ -115,7 +116,8 @@ class Product(models.Model):
         verbose_name='Изображение предпросмотр товара',
         help_text=mark_safe(f'<span style="color:red; font-size:14px;">'
                             f'Разрешение изображения должно быть: '
-                            f'{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0]}*{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]}'
+                            f'{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[0]}'
+                            f'*{settings.PRODUCT_PREVIEW_IMAGE_RESOLUTION[1]}'
                             f'</span>')
     )
 
@@ -151,7 +153,8 @@ class FavoriteProduct(models.Model):
 
 
 class ImageProduct(models.Model):
-    title = models.CharField(max_length=100, verbose_name='Заголовок изображения')
+    title = models.CharField(max_length=100,
+                             verbose_name='Заголовок изображения')
     image = models.ImageField(
         upload_to='product/',
         verbose_name='Изображение товара',
@@ -170,7 +173,8 @@ class ImageProduct(models.Model):
         super().save(*args, **kwargs)
         img = Image.open(self.image.path)
 
-        if img.width > settings.PRODUCT_IMAGE_RESOLUTION[0] or img.height > settings.PRODUCT_IMAGE_RESOLUTION[1]:
+        if img.width > (settings.PRODUCT_IMAGE_RESOLUTION[0]
+                        or img.height > settings.PRODUCT_IMAGE_RESOLUTION[1]):
             img.thumbnail(settings.PRODUCT_IMAGE_RESOLUTION)
             img.save(self.image.path)
 
@@ -184,7 +188,9 @@ class ImageProduct(models.Model):
 
 
 class ShoppingCartProduct(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='cart')
+    product = models.ForeignKey(Product,
+                                on_delete=models.CASCADE,
+                                related_name='cart')
     amount = models.PositiveSmallIntegerField(
         validators=[validate_above_zero],
         default=1,
@@ -220,22 +226,42 @@ class Order(models.Model):
         (ShippingMethod.CDEK, ShippingMethod.CDEK),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             related_name='orders')
     product = models.ManyToManyField(
         'Product',
         through='OrderProduct',
         related_name='order'
     )
-    status = models.CharField(max_length=20, choices=status_order, default=OrderStatus.ORDERED, verbose_name='Статус заказа')
-    date_ordered = models.DateTimeField(auto_now_add=True, verbose_name='Дата оформления заказа')
-    date_sent = models.DateTimeField(blank=True, null=True, verbose_name='Дата отправки заказа')
-    date_completed = models.DateTimeField(blank=True, null=True, verbose_name='Дата завершения заказа')
-    city = models.CharField(max_length=50, default='Город доставки заказа')
-    address = models.CharField(max_length=150, default='Адрес доставки заказа')
-    shipping_method = models.CharField(max_length=30, choices=method_shipment, default=ShippingMethod.MAIL, verbose_name='Способ доставки заказа')
-    comment = models.CharField(max_length=250, blank=True, verbose_name='Комментарии к заказу')
-    is_paid = models.BooleanField(default=False, verbose_name='Статус оплаты')
-    total_cost = models.DecimalField(max_digits=12, decimal_places=2, verbose_name='Общая стоимость заказа')
+    status = models.CharField(max_length=20,
+                              choices=status_order,
+                              default=OrderStatus.ORDERED,
+                              verbose_name='Статус заказа')
+    date_ordered = models.DateTimeField(auto_now_add=True,
+                                        verbose_name='Дата оформления заказа')
+    date_sent = models.DateTimeField(blank=True,
+                                     null=True,
+                                     verbose_name='Дата отправки заказа')
+    date_completed = models.DateTimeField(blank=True,
+                                          null=True,
+                                          verbose_name='Дата завершения заказа')
+    city = models.CharField(max_length=50,
+                            default='Город доставки заказа')
+    address = models.CharField(max_length=150,
+                               default='Адрес доставки заказа')
+    shipping_method = models.CharField(max_length=30,
+                                       choices=method_shipment,
+                                       default=ShippingMethod.MAIL,
+                                       verbose_name='Способ доставки заказа')
+    comment = models.CharField(max_length=250,
+                               blank=True,
+                               verbose_name='Комментарии к заказу')
+    is_paid = models.BooleanField(default=False,
+                                  verbose_name='Статус оплаты')
+    total_cost = models.DecimalField(max_digits=12,
+                                     decimal_places=2,
+                                     verbose_name='Общая стоимость заказа')
 
     def get_order_products(self):
         products = OrderProduct.objects.filter(order=self.id)

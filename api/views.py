@@ -21,7 +21,7 @@ class CreateDeleteViewSet(mixins.CreateModelMixin,
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
@@ -46,7 +46,7 @@ class ProductFavoriteViewSet(CreateDeleteViewSet):
         product = get_object_or_404(Product, id=product_id)
 
         queryset = FavoriteProduct.objects.filter(user=self.request.user,
-                                                 product=product)
+                                                  product=product)
         if not queryset:
             return Response(
                 {'message': 'Ошибка удаления товара из избранного, '
@@ -90,22 +90,35 @@ class ProductShoppingCartViewSet(CreateDeleteViewSet):
             permission_classes=(permissions.IsAuthenticated,),
             detail=False)
     def increase(self, request, product_id):
-        product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+        product = get_object_or_404(
+            ShoppingCartProduct, product__id=product_id, user=request.user
+        )
         product.amount += 1
         product.save()
 
-        return Response({'message': 'Товар в корзине увеличился на одну единицу'}, status=status.HTTP_200_OK)
+        return Response(
+            {'message': 'Товар в корзине увеличился на одну единицу'},
+            status=status.HTTP_200_OK
+        )
 
     @action(methods=['post'],
             url_path='reduce',
             permission_classes=(permissions.IsAuthenticated,),
             detail=False)
     def reduce(self, request, product_id):
-        product = get_object_or_404(ShoppingCartProduct, product__id=product_id, user=request.user)
+        product = get_object_or_404(
+            ShoppingCartProduct, product__id=product_id, user=request.user
+        )
 
         if product.amount > 1:
             product.amount -= 1
             product.save()
-            return Response({'message': 'Товар в корзине уменьшился на одну единицу'}, status=status.HTTP_200_OK)
+            return Response(
+                {'message': 'Товар в корзине уменьшился на одну единицу'},
+                status=status.HTTP_200_OK
+            )
 
-        return Response({'message': 'Количество товара не может быть меньше одного.'}, status=status.HTTP_200_OK)
+        return Response(
+            {'message': 'Количество товара не может быть меньше одного.'},
+            status=status.HTTP_200_OK
+        )

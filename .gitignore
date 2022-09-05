@@ -150,3 +150,4 @@ dmypy.json
 /dump_data/dump04-09.json
 /dump_data/
 /static/
+/setup.cfg

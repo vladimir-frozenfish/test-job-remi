@@ -28,7 +28,13 @@ class CustomUserModel(UserAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug', 'parent_category', 'child_category', 'image', 'get_image')
+    list_display = ('id',
+                    'name',
+                    'slug',
+                    'parent_category',
+                    'child_category',
+                    'image',
+                    'get_image')
     readonly_fields = ('get_image',)
     list_display_links = ('id', 'name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
@@ -63,7 +69,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('brand', 'category')
 
     def get_image_preview(self, obj):
-        return mark_safe(f'<img src={obj.image_preview.url} width="100" height="100">')
+        return mark_safe(f'<img src={obj.image_preview.url}'
+                         f' width="100" height="100">')
 
     get_image_preview.short_description = 'Изображение предпросмотр товара'
 
@@ -89,7 +96,19 @@ class ShoppingCartProductAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'total_cost', 'get_order_products', 'status', 'is_paid', 'date_ordered', 'date_sent', 'date_completed', 'shipping_method', 'city', 'address', 'comment')
+    list_display = ('id',
+                    'user',
+                    'total_cost',
+                    'get_order_products',
+                    'status',
+                    'is_paid',
+                    'date_ordered',
+                    'date_sent',
+                    'date_completed',
+                    'shipping_method',
+                    'city',
+                    'address',
+                    'comment')
     readonly_fields = ('date_ordered', 'get_order_products')
     list_filter = ('user',)
     list_display_links = ('id', 'user')
@@ -112,7 +131,3 @@ admin.site.register(OrderProduct, OrderProductAdmin)
 
 admin.site.site_title = 'Администрирование Интернет-магазина'
 admin.site.site_header = 'Администрирование Интернет-магазина'
-
-
-
-

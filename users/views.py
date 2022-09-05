@@ -28,7 +28,7 @@ def cabinet(request):
 def favorite_product(request):
     products = request.user.favorite_product.all()
 
-    context = {'products': products,}
+    context = {'products': products, }
     template = 'users/favorite_product.html'
 
     return render(request, template, context)
@@ -38,7 +38,7 @@ def favorite_product(request):
 def shopping_cart(request):
     products = ShoppingCartProduct.objects.filter(user=request.user)
 
-    context = {'products': products,}
+    context = {'products': products, }
     template = 'users/shopping_cart.html'
 
     return render(request, template, context)
@@ -57,7 +57,9 @@ def ordering(request):
     products = ShoppingCartProduct.objects.filter(user=request.user)
 
     """получение общей стоимости заказа"""
-    total_cost_order = products.annotate(total_cost=(F('product__price')*F('amount'))).aggregate(Sum('total_cost'))['total_cost__sum']
+    total_cost_order = products.annotate(
+        total_cost=(F('product__price') * F('amount'))
+    ).aggregate(Sum('total_cost'))['total_cost__sum']
 
     template = 'users/ordering.html'
 
@@ -75,7 +77,9 @@ def ordering(request):
         sent_email_to_manager_ordering(order, products)
 
         """сохранение в заказ товаров"""
-        list_for_products = [OrderProduct(order=order, product=product.product, amount=product.amount) for product in products]
+        list_for_products = [OrderProduct(
+            order=order, product=product.product, amount=product.amount
+        ) for product in products]
         OrderProduct.objects.bulk_create(list_for_products)
 
         """удаление товаров из корзины"""
@@ -109,6 +113,6 @@ def order_list(request):
 
     template = 'users/order_list.html'
 
-    context = {'orders': orders,}
+    context = {'orders': orders, }
 
     return render(request, template, context)
